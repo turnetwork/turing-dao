@@ -1,6 +1,6 @@
-# turing-dao
+# turing-node
 
-A new SRML-based Substrate node, ready for hacking.
+An implementation of Decentralized Autonomous Organization(DAO) as a [Parity Substrate](https://www.parity.io/substrate/) runtime. And the DAO on Substrate inspired by [slockit/**DAO**](<https://github.com/slockit/DAO>).
 
 # Building
 
@@ -22,13 +22,15 @@ Build the WebAssembly binary:
 ./scripts/build.sh
 ```
 
-Build all native code:
+Build all native code: 
 
 ```bash
-cargo build
+cargo build --release
 ```
 
 # Run
+
+## Run Development Chain
 
 You can start a development chain with:
 
@@ -66,3 +68,26 @@ cargo run -- \
 ```
 
 Additional CLI usage options are available and may be shown by running `cargo run -- --help`.
+
+## Run Development Substrate Node
+
+```bash
+./target/release/turing-dao --dev
+```
+
+If you have run the node before, running `./target/release/turing-node purge-chain --dev` will ensure that you start a new node.
+
+# UI
+
+[Substrate Portal](https://polkadot.js.org/apps/)
+
+```
+Settings > General > remote node/endpoint to connect to > Local Node (127.0.0.1:9944)
+Settings > Developer > Manually enter your custom type definitions as valid JSON > 
+{
+  "TokenBalance": "u128",
+  "Bytes": "Vec<u8>",
+  "Moment": "u64",
+}
+```
+

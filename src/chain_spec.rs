@@ -1,7 +1,7 @@
 use primitives::{ed25519, sr25519, Pair};
 use turing_dao_runtime::{
 	AccountId, GenesisConfig, ConsensusConfig, TimestampConfig, BalancesConfig,
-	SudoConfig, IndicesConfig,
+	SudoConfig, IndicesConfig, LockableTokenConfig, DaoConfig
 };
 use substrate_service;
 
@@ -90,6 +90,15 @@ impl Alternative {
 	}
 }
 
+fn days(time: u64) -> u64{
+	time*24*3600
+}
+
+fn weeks(time: u64) -> u64{
+	time*7*24*3600
+}
+
+
 fn testnet_genesis(initial_authorities: Vec<AuthorityId>, endowed_accounts: Vec<AccountId>, root_key: AccountId) -> GenesisConfig {
 	GenesisConfig {
 		consensus: Some(ConsensusConfig {
@@ -114,6 +123,22 @@ fn testnet_genesis(initial_authorities: Vec<AuthorityId>, endowed_accounts: Vec<
 		}),
 		sudo: Some(SudoConfig {
 			key: root_key,
+		}),
+		lockabletoken: Some(LockableTokenConfig{
+			total_supply: 21000000,
+			name: "ABMatrix Token".as_bytes().into(),
+			symbol: "ABT".as_bytes().into(),
+			decimal: 18,
+		}),
+		dao: Some(DaoConfig {
+			// set Alice as curator
+			curator: account_key("Alice"),
+			min_proposal_deposit: 100,
+			min_quorum_divisor: 7,
+			min_proposal_debate_period: weeks(2),
+			quorum_havling_period: weeks(25),
+			execute_proposal_period: days(10),
+			max_deposit_divisor: 100,
 		}),
 	}
 }

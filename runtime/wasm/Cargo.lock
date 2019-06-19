@@ -1334,40 +1334,6 @@ dependencies = [
 ]
 
 [[package]]
-name = "turing-dao-runtime"
-version = "1.0.0"
-dependencies = [
- "parity-codec 3.5.1 (registry+https://github.com/rust-lang/crates.io-index)",
- "safe-mix 1.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
- "serde 1.0.89 (registry+https://github.com/rust-lang/crates.io-index)",
- "sr-io 1.0.0 (git+https://github.com/paritytech/substrate.git?rev=783ca1892892454e05e234cda5f7a2e42a54461e)",
- "sr-primitives 1.0.0 (git+https://github.com/paritytech/substrate.git?rev=783ca1892892454e05e234cda5f7a2e42a54461e)",
- "sr-std 1.0.0 (git+https://github.com/paritytech/substrate.git?rev=783ca1892892454e05e234cda5f7a2e42a54461e)",
- "sr-version 1.0.0 (git+https://github.com/paritytech/substrate.git?rev=783ca1892892454e05e234cda5f7a2e42a54461e)",
- "srml-aura 1.0.0 (git+https://github.com/paritytech/substrate.git?rev=783ca1892892454e05e234cda5f7a2e42a54461e)",
- "srml-balances 1.0.0 (git+https://github.com/paritytech/substrate.git?rev=783ca1892892454e05e234cda5f7a2e42a54461e)",
- "srml-consensus 1.0.0 (git+https://github.com/paritytech/substrate.git?rev=783ca1892892454e05e234cda5f7a2e42a54461e)",
- "srml-executive 1.0.0 (git+https://github.com/paritytech/substrate.git?rev=783ca1892892454e05e234cda5f7a2e42a54461e)",
- "srml-indices 1.0.0 (git+https://github.com/paritytech/substrate.git?rev=783ca1892892454e05e234cda5f7a2e42a54461e)",
- "srml-sudo 1.0.0 (git+https://github.com/paritytech/substrate.git?rev=783ca1892892454e05e234cda5f7a2e42a54461e)",
- "srml-support 1.0.0 (git+https://github.com/paritytech/substrate.git?rev=783ca1892892454e05e234cda5f7a2e42a54461e)",
- "srml-system 1.0.0 (git+https://github.com/paritytech/substrate.git?rev=783ca1892892454e05e234cda5f7a2e42a54461e)",
- "srml-timestamp 1.0.0 (git+https://github.com/paritytech/substrate.git?rev=783ca1892892454e05e234cda5f7a2e42a54461e)",
- "substrate-client 1.0.0 (git+https://github.com/paritytech/substrate.git?rev=783ca1892892454e05e234cda5f7a2e42a54461e)",
- "substrate-consensus-aura-primitives 1.0.0 (git+https://github.com/paritytech/substrate.git?rev=783ca1892892454e05e234cda5f7a2e42a54461e)",
- "substrate-consensus-authorities 1.0.0 (git+https://github.com/paritytech/substrate.git?rev=783ca1892892454e05e234cda5f7a2e42a54461e)",
- "substrate-offchain-primitives 0.1.0 (git+https://github.com/paritytech/substrate.git?rev=783ca1892892454e05e234cda5f7a2e42a54461e)",
- "substrate-primitives 1.0.0 (git+https://github.com/paritytech/substrate.git?rev=783ca1892892454e05e234cda5f7a2e42a54461e)",
-]
-
-[[package]]
-name = "turing-dao-runtime-wasm"
-version = "1.0.0"
-dependencies = [
- "turing-dao-runtime 1.0.0",
-]
-
-[[package]]
 name = "nodrop"
 version = "0.1.13"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -3081,6 +3047,40 @@ version = "0.12.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 dependencies = [
  "hash-db 0.12.2 (registry+https://github.com/rust-lang/crates.io-index)",
+]
+
+[[package]]
+name = "turing-dao-runtime"
+version = "1.0.0"
+dependencies = [
+ "parity-codec 3.5.1 (registry+https://github.com/rust-lang/crates.io-index)",
+ "safe-mix 1.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "serde 1.0.89 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sr-io 1.0.0 (git+https://github.com/paritytech/substrate.git?rev=783ca1892892454e05e234cda5f7a2e42a54461e)",
+ "sr-primitives 1.0.0 (git+https://github.com/paritytech/substrate.git?rev=783ca1892892454e05e234cda5f7a2e42a54461e)",
+ "sr-std 1.0.0 (git+https://github.com/paritytech/substrate.git?rev=783ca1892892454e05e234cda5f7a2e42a54461e)",
+ "sr-version 1.0.0 (git+https://github.com/paritytech/substrate.git?rev=783ca1892892454e05e234cda5f7a2e42a54461e)",
+ "srml-aura 1.0.0 (git+https://github.com/paritytech/substrate.git?rev=783ca1892892454e05e234cda5f7a2e42a54461e)",
+ "srml-balances 1.0.0 (git+https://github.com/paritytech/substrate.git?rev=783ca1892892454e05e234cda5f7a2e42a54461e)",
+ "srml-consensus 1.0.0 (git+https://github.com/paritytech/substrate.git?rev=783ca1892892454e05e234cda5f7a2e42a54461e)",
+ "srml-executive 1.0.0 (git+https://github.com/paritytech/substrate.git?rev=783ca1892892454e05e234cda5f7a2e42a54461e)",
+ "srml-indices 1.0.0 (git+https://github.com/paritytech/substrate.git?rev=783ca1892892454e05e234cda5f7a2e42a54461e)",
+ "srml-sudo 1.0.0 (git+https://github.com/paritytech/substrate.git?rev=783ca1892892454e05e234cda5f7a2e42a54461e)",
+ "srml-support 1.0.0 (git+https://github.com/paritytech/substrate.git?rev=783ca1892892454e05e234cda5f7a2e42a54461e)",
+ "srml-system 1.0.0 (git+https://github.com/paritytech/substrate.git?rev=783ca1892892454e05e234cda5f7a2e42a54461e)",
+ "srml-timestamp 1.0.0 (git+https://github.com/paritytech/substrate.git?rev=783ca1892892454e05e234cda5f7a2e42a54461e)",
+ "substrate-client 1.0.0 (git+https://github.com/paritytech/substrate.git?rev=783ca1892892454e05e234cda5f7a2e42a54461e)",
+ "substrate-consensus-aura-primitives 1.0.0 (git+https://github.com/paritytech/substrate.git?rev=783ca1892892454e05e234cda5f7a2e42a54461e)",
+ "substrate-consensus-authorities 1.0.0 (git+https://github.com/paritytech/substrate.git?rev=783ca1892892454e05e234cda5f7a2e42a54461e)",
+ "substrate-offchain-primitives 0.1.0 (git+https://github.com/paritytech/substrate.git?rev=783ca1892892454e05e234cda5f7a2e42a54461e)",
+ "substrate-primitives 1.0.0 (git+https://github.com/paritytech/substrate.git?rev=783ca1892892454e05e234cda5f7a2e42a54461e)",
+]
+
+[[package]]
+name = "turing-dao-runtime-wasm"
+version = "1.0.0"
+dependencies = [
+ "turing-dao-runtime 1.0.0",
 ]
 
 [[package]]
