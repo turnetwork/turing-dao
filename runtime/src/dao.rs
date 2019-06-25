@@ -1,6 +1,6 @@
 /// A simple implementation of the DAO.
 
-use crate::lockabletoken as token;
+use crate::daotoken as token;
 use parity_codec::{Encode, Decode};
 use rstd::prelude::*;
 use runtime_primitives::traits::{As, CheckedAdd, CheckedSub, Hash};
@@ -104,7 +104,7 @@ decl_module! {
     // initialize events for this module
     fn deposit_event<T>() = default;
 
-    fn init(origin) -> Result {
+    pub fn init(origin) -> Result {
         let curator = Self::curator().ok_or("curator not set?")?;
         let sender = ensure_signed(origin)?;
         ensure!(sender == curator, "Only the curator set in genesis config can initialize");
@@ -128,7 +128,7 @@ decl_module! {
             
         let min_proposal_debate_period  = Self::min_proposal_debate_period().ok_or("MinProposalDebatePeriod not set.")?;
         ensure!(debating_period > min_proposal_debate_period, "debating_period too short");
-        ensure!(debating_period < T::Moment::sa(8*7*24*3600), "debating_period too long");
+        ensure!(debating_period <T::Moment::sa(8*7*24*3600), "debating_period too long");
 
         let min_deposit = Self::min_proposal_deposit().ok_or("MinProposalDeposit not set?")?;
         ensure!(deposit > min_deposit, "deposit should be more than min_deposit");
@@ -178,7 +178,7 @@ decl_module! {
         Ok(())
     }
 
-    fn vote(origin, proposal_id: u64, supports_proposal: bool) -> Result{
+    pub fn vote(origin, proposal_id: u64, supports_proposal: bool) -> Result{
         let sender = ensure_signed(origin)?;
         ensure!(Self::blocked(sender.clone()) == 0
                || Self::proposals(proposal_id).voting_deadline > Self::proposals(Self::blocked(sender.clone())).voting_deadline,
@@ -205,7 +205,7 @@ decl_module! {
         Ok(())
     }
 
-    fn execute_proposal(proposal_id: u64, transaction_data: Vec<u8>) -> Result{
+    pub fn execute_proposal(proposal_id: u64, transaction_data: Vec<u8>) -> Result{
         let execute_proposal_period = Self::execute_proposal_period().ok_or("execute_proposal_period not set?")?;
         let p = Self::proposals(proposal_id);
         let now = <timestamp::Module<T>>::get();
@@ -263,7 +263,7 @@ decl_module! {
         Ok(())
     }
 
-    fn change_min_proposal_deposit(origin, new_min_proposal_deposit: T::TokenBalance) -> Result{
+    pub fn change_min_proposal_deposit(origin, new_min_proposal_deposit: T::TokenBalance) -> Result{
         let sender = ensure_signed(origin)?;
         if sender != Self::curator().unwrap() {
             return Err("Only curator can change min_proposal_deposit");
@@ -277,7 +277,7 @@ decl_module! {
         Ok(())
     }
 
-    fn change_allowed_recipients(origin, recipient: T::AccountId, allowed: bool) ->Result{
+    pub fn change_allowed_recipients(origin, recipient: T::AccountId, allowed: bool) ->Result{
         let sender = ensure_signed(origin)?;
         if sender != Self::curator().unwrap() {
             return Err("Only curator can change whitelist");
@@ -287,7 +287,7 @@ decl_module! {
         Ok(())
     }
 
-    fn halvemin_quorum(origin) -> Result {
+    pub fn halvemin_quorum(origin) -> Result {
         let sender = ensure_signed(origin)?;
         let now = <timestamp::Module<T>>::get();
         let quorum_havling_period = Self::quorum_havling_period().ok_or("quorum_havling_period not set ?")?;
@@ -306,7 +306,7 @@ decl_module! {
         }
     }
 
-    fn unblock_me(origin) -> Result {
+    pub fn unblock_me(origin) -> Result {
         let sender = ensure_signed(origin)?;
         ensure!(Self::get_or_modify_blocked(sender), "can not modify blocked account");
         Ok(())

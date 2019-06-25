@@ -56,7 +56,9 @@ pub type BlockNumber = u64;
 pub type Nonce = u64;
 
 mod dao;
+mod daotoken;
 mod lockabletoken;
+mod ico;
 
 /// Opaque types. These are used by the CLI to instantiate machinery that don't need to know
 /// the specifics of the runtime. They can then be made to be agnostic over specific formats
@@ -187,6 +189,11 @@ impl sudo::Trait for Runtime {
 	type Proposal = Call;
 }
 
+impl daotoken::Trait for Runtime{
+	type Event = Event;
+	type TokenBalance = u128;
+}
+
 impl lockabletoken::Trait for Runtime{
 	type Event = Event;
 	type TokenBalance = u128;
@@ -194,6 +201,11 @@ impl lockabletoken::Trait for Runtime{
 
 impl dao::Trait for Runtime{
 	type Event = Event;
+}
+
+impl ico::Trait for Runtime {
+	type Event = Event;
+	type Currency = Balances;
 }
 
 construct_runtime!(
@@ -209,8 +221,11 @@ construct_runtime!(
 		Indices: indices,
 		Balances: balances,
 		Sudo: sudo,
-		LockableToken: lockabletoken::{Module, Call, Storage, Event<T>, Config<T>},
-		Dao: dao::{Module, Call, Storage, Event<T>, Config<T>},
+
+		LockableToken: lockabletoken::{Module, Call, Storage, Event<T>},
+		Dao: dao:: {Module, Call, Storage, Event<T>, Config<T>},
+		DaoToken: daotoken:: {Module, Call, Storage, Event<T>, Config<T>},
+		ICO: ico:: {Module, Call, Storage, Event<T>},
 	}
 );
 

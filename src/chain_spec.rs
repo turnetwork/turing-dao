@@ -1,7 +1,7 @@
 use primitives::{ed25519, sr25519, Pair};
 use turing_dao_runtime::{
 	AccountId, GenesisConfig, ConsensusConfig, TimestampConfig, BalancesConfig,
-	SudoConfig, IndicesConfig, LockableTokenConfig, DaoConfig
+	SudoConfig, IndicesConfig, DaoConfig, DaoTokenConfig
 };
 use substrate_service;
 
@@ -46,7 +46,9 @@ impl Alternative {
 				|| testnet_genesis(vec![
 					authority_key("Alice")
 				], vec![
-					account_key("Alice")
+					account_key("Alice"),
+					account_key("Bob"),
+					account_key("Charlie"),
 				],
 					account_key("Alice")
 				),
@@ -80,7 +82,7 @@ impl Alternative {
 			),
 		})
 	}
-
+  
 	pub(crate) fn from(s: &str) -> Option<Self> {
 		match s {
 			"dev" => Some(Alternative::Development),
@@ -124,12 +126,6 @@ fn testnet_genesis(initial_authorities: Vec<AuthorityId>, endowed_accounts: Vec<
 		sudo: Some(SudoConfig {
 			key: root_key,
 		}),
-		lockabletoken: Some(LockableTokenConfig{
-			total_supply: 21000000,
-			name: "ABMatrix Token".as_bytes().into(),
-			symbol: "ABT".as_bytes().into(),
-			decimal: 18,
-		}),
 		dao: Some(DaoConfig {
 			// set Alice as curator
 			curator: account_key("Alice"),
@@ -139,6 +135,12 @@ fn testnet_genesis(initial_authorities: Vec<AuthorityId>, endowed_accounts: Vec<
 			quorum_havling_period: weeks(25),
 			execute_proposal_period: days(10),
 			max_deposit_divisor: 100,
+		}),
+		daotoken: Some(DaoTokenConfig {
+			total_supply: 21000000,
+			name: "ABMatrix Token".as_bytes().into(),
+			symbol: "ABT".as_bytes().into(),
+			decimal: 18,
 		}),
 	}
 }
