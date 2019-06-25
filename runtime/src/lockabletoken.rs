@@ -142,7 +142,7 @@ impl<T: Trait> Module<T> {
 
         <Balances<T>>::insert((ico_id, from.clone()), updated_balance_from);
   
-        <LockedTokens<T>>::insert((ico_id, from), total_lock);
+        <LockedTokens<T>>::insert((ico_id, from), value);
         <TotalLocked<T>>::insert(ico_id, updated_total_lock);
 
         Ok(())

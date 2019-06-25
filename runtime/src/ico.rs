@@ -225,12 +225,24 @@ mod tests {
         type Moment = u64;
         type OnTimestampSet = ();
     }
+    impl balances::Trait for Test {
+	    type Balance = u64;
+        type OnFreeBalanceZero = ();
+	    type OnNewAccount = ();
+	    type Event = ();
+	    type TransactionPayment = ();
+	    type TransferPayment = ();
+	    type DustRemoval = ();
+    }
     impl Trait for Test {
         type Event = ();
+        type Currency = balances::Module<Self>;
     }
+    
     type Ico = Module<Test>;
     type Token = token::Module<Test>;
     type Timestamp = timestamp::Module<Test>;
+    type Balances = balances::Module<Test>;
 
     // builds the genesis config store and sets mock values
     fn new_test_ext() -> runtime_io::TestExternalities<Blake2Hasher> {
@@ -238,14 +250,162 @@ mod tests {
             .build_storage()
             .unwrap()
             .0;
+        t.extend(
+            balances::GenesisConfig::<Test> {
+                balances: vec![(1, 200)],
+                transaction_base_fee: 0,
+			    transaction_byte_fee: 0,
+			    existential_deposit: 1,
+			    transfer_fee: 0,
+			    creation_fee: 0,
+			    vesting: vec![],
+            }
+                .build_storage()
+                .unwrap()
+                .0,
+        );
         
         t.into()
     }
 
-    // TODO: test for ico
     #[test]
-    fn should_init() {
+    fn should_create_success() {
         with_externalities(&mut new_test_ext(), || {
+            assert_ok!(Ico::create_crowdsale(
+                Origin::signed(1),
+                2,
+                100,
+                10,
+                1,
+                "ABMatrix Token".as_bytes().into(),
+                "ABT".as_bytes().into(),
+                1000,
+                18
+                )
+            );
+        });
+    }
+
+    #[test]
+    fn check_pay() {
+        with_externalities(&mut new_test_ext(), || {
+            assert_ok!(Ico::create_crowdsale(
+                Origin::signed(1),
+                2,
+                100,
+                10,
+                1,
+                "ABMatrix Token".as_bytes().into(),
+                "ABT".as_bytes().into(),
+                1000,
+                18
+                )
+            );
+            assert_ok!(Ico::pay(Origin::signed(1), 0, 100));
+
+            // check lock
+            assert_noop!(Balances::transfer(Origin::signed(1), 2, 200), "account liquidity restrictions prevent withdrawal");
+
+            assert_eq!(Token::balance_of((0, 1)), 1100);
+        });
+    }
+
+    #[test]
+    fn check_invest() {
+        with_externalities(&mut new_test_ext(), || {
+            assert_ok!(Ico::create_crowdsale(
+                Origin::signed(1),
+                2,
+                100,
+                10,
+                1,
+                "ABMatrix Token".as_bytes().into(),
+                "ABT".as_bytes().into(),
+                1000,
+                18
+                )
+            );
+            assert_ok!(Ico::pay(Origin::signed(1), 0, 100));
+            assert_ok!(Ico::invest(Origin::signed(1), 0, 100));
+        });
+    }
+
+    #[test]
+    fn should_pass_check_goal_reached(){
+        with_externalities(&mut new_test_ext(), || {
+            assert_ok!(Ico::create_crowdsale(
+                Origin::signed(1),
+                2,
+                100,
+                10,
+                1,
+                "ABMatrix Token".as_bytes().into(),
+                "ABT".as_bytes().into(),
+                1000,
+                18
+            ));
+            assert_ok!(Ico::pay(Origin::signed(1), 0, 100));
+            assert_ok!(Ico::invest(Origin::signed(1), 0, 100));
+
+            Timestamp::set_timestamp(11);
+            assert_ok!(Ico::check_goal_reached(0));
+        });
+    }
+
+    #[test]
+    fn should_pass_distribute_goal_reached() {
+        with_externalities(&mut new_test_ext(), || {
+            assert_ok!(Ico::create_crowdsale(
+                Origin::signed(1),
+                2,
+                100,
+                10,
+                1,
+                "ABMatrix Token".as_bytes().into(),
+                "ABT".as_bytes().into(),
+                1000,
+                18
+            ));
+            assert_ok!(Ico::pay(Origin::signed(1), 0, 100));
+            assert_ok!(Ico::invest(Origin::signed(1), 0, 100));
+
+            Timestamp::set_timestamp(11);
+            assert_ok!(Ico::check_goal_reached(0));
+            let c = Ico::crowdsales(0);
+            assert_eq!(c.funding_goal_reached, true);
+
+            assert_ok!(Ico::distribute(Origin::signed(2), 0));
+            assert_eq!(Token::balance_of((0, 2)), 100);
+        });
+    }
+
+    #[test]
+    fn should_pass_distribute_withdraw() {
+        with_externalities(&mut new_test_ext(), || {
+            assert_ok!(Ico::create_crowdsale(
+                Origin::signed(1),
+                2,
+                100,
+                10,
+                1,
+                "ABMatrix Token".as_bytes().into(),
+                "ABT".as_bytes().into(),
+                1000,
+                18
+            ));
+            assert_eq!(Token::balance_of((0, 1)), 1000);
+            assert_ok!(Ico::pay(Origin::signed(1), 0, 100));
+            assert_eq!(Token::balance_of((0, 1)), 1100);
+            assert_ok!(Ico::invest(Origin::signed(1), 0, 99));
+            assert_eq!(Token::balance_of((0, 1)), 1001);
+            
+            assert_eq!(Token::locked_tokens((0, 1)), 99);
+
+            Timestamp::set_timestamp(11);
+            assert_ok!(Ico::check_goal_reached(0));
+
+            assert_ok!(Ico::distribute(Origin::signed(1), 0));
+            assert_eq!(Token::balance_of((0, 1)), 1100);
         });
     }
 }

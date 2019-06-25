@@ -20,6 +20,7 @@ std = [
     'safe-mix/std',
     'consensus-aura/std',
     'offchain-primitives/std',
+    'consensus_authorities/std'
 ]
 [dependencies.aura]
 default_features = false
